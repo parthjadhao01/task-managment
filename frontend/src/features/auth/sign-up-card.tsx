@@ -39,7 +39,7 @@ export default function SignUpCard() {
             const response = await axios.post("http://localhost:8000/auth/register")
             const token = response.data.token
             localStorage.setItem("token",token)
-            router.push("/dashbord")
+            router.push("/(dashbord)")
         } catch (error) {
             console.log(error)
             alert("Something went wrong")

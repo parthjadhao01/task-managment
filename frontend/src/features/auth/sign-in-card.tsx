@@ -38,7 +38,7 @@ export default function SignInCard() {
             console.log(res)
             const token = res.data.token
             localStorage.setItem("token", res.data.token);
-            router.push("/dashbord")
+            router.push("/(dashbord)")
         } catch (error) {   
             console.log(error)
             alert("Invalid Credentials")

@@ -1,7 +1,12 @@
+
+import UserButton from '@/features/auth/user-button'
 import React from 'react'
 
 export default function page() {
   return (
-    <div>page</div>
+    <div>
+        this is home page
+        
+    </div>
   )
 }
