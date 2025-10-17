@@ -12,6 +12,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
     email: z.string(),
@@ -20,6 +22,8 @@ const formSchema = z.object({
 });
 
 export default function SignUpCard() {
+
+    const router = useRouter()
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -30,8 +34,16 @@ export default function SignUpCard() {
         }
     })
 
-    const onSubmit = (value: z.infer<typeof formSchema>) => {
-        console.log(value)
+    const onSubmit = async (value: z.infer<typeof formSchema>) => {
+        try {
+            const response = await axios.post("http://localhost:8000/auth/register")
+            const token = response.data.token
+            localStorage.setItem("token",token)
+            router.push("/dashbord")
+        } catch (error) {
+            console.log(error)
+            alert("Something went wrong")
+        }
     }
 
     return (

@@ -2,6 +2,7 @@ import express from "express";
 import userModel from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import generateJWTToken from "../utils/generateJWT.js";
+import { authProtect } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
@@ -35,5 +36,18 @@ router.post("/login", async (req, res) => {
         return res.status(400).send("Invalid credentials");
     }
     res.send({ message: "User logged in", token: generateJWTToken(user._id) });
+})
+
+router.get("/profile",authProtect ,async(req,res)=>{
+    try {
+        const user = req.user
+        if (user) {
+            res.status(200).send(user)
+            console.log("user request succesfull")
+        }
+    } catch (error) {
+        res.status(500).send(error)
+        console.log(error)
+    }
 })
 export default router

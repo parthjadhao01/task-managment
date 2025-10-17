@@ -12,6 +12,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import Link from 'next/link'
+import axios from "axios";
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
     email: z.string().email(),
@@ -19,6 +21,7 @@ const formSchema = z.object({
 });
 
 export default function SignInCard() {
+    const router = useRouter()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -28,8 +31,18 @@ export default function SignInCard() {
         }
     })
 
-    const onSubmit = (value : z.infer<typeof formSchema>) => {
-        console.log(value)
+    const onSubmit = async (value : z.infer<typeof formSchema>) => {
+        try {
+            // TODO : api base url
+            const res = await axios.post(`http://localhost:8000/auth/login`, value)
+            console.log(res)
+            const token = res.data.token
+            localStorage.setItem("token", res.data.token);
+            router.push("/dashbord")
+        } catch (error) {   
+            console.log(error)
+            alert("Invalid Credentials")
+        }
     }
 
     return (
