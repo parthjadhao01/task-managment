@@ -2,6 +2,7 @@ import express from "express"
 import { authProtect } from "../middleware/auth.middleware.js"
 import userModel from "../models/user.model.js"
 import workspaceModel from "../models/workspace.model.js"
+import memberModel from "../models/member.model.js"
 
 const router = express.Router()
 
@@ -14,6 +15,8 @@ router.post("/create-workspace", authProtect, (req, res) => {
             // Todo : In future update workspaced Ids in user table also
             const newWorkspace = new workspaceModel({ name, userId })
             newWorkspace.save();
+            const newMember = new memberModel({ userId, workspaceId : newWorkspace._id, role : "admin"})
+            newMember.save()
             res.status(201).send({ message: "Workspace created succesfully", workspace: newWorkspace })
         } else {
             res.status(400).send({ message: "User not found" })
@@ -23,5 +26,23 @@ router.post("/create-workspace", authProtect, (req, res) => {
         console.log(error)
     }
 })
+
+router.get("/get-workspaces", authProtect, async (req, res) => {
+    try {
+        const userId = req.user._id
+        const user = await userModel.findById(userId)
+        if (user) {
+            const workspaces = await workspaceModel.find({userId})
+            if (!workspaces) {
+                res.status(400).send("No workspaces found")
+            }
+            res.status(200).send(workspaces)
+        }
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
+        console.log("Intenal Server Error : ",error)
+    }
+})
+
 
 export default router

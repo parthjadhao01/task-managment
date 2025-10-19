@@ -14,6 +14,7 @@ import z from "zod";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 const formSchema = z.object({
     email: z.string(),
@@ -38,11 +39,12 @@ export default function SignUpCard() {
         try {
             const response = await axios.post("http://localhost:8000/auth/register")
             const token = response.data.token
+            toast.success("Signup Succesfull")
             localStorage.setItem("token",token)
-            router.push("/(dashbord)")
+            router.push("/")
         } catch (error) {
             console.log(error)
-            alert("Something went wrong")
+            toast.error("Something Went Wrong")
         }
     }
 
