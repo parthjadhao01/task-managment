@@ -4,7 +4,8 @@ import useGetProject from '@/hooks/useGetProject';
 import useGetWorkSpace from '@/hooks/useGetProject';
 import useWorkspaceId from '@/hooks/useWorkSpaceId';
 import { cn } from '@/lib/utils';
-import Link  from 'next/link';
+import { Avatar, AvatarFallback } from '@radix-ui/react-avatar';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useEffect } from 'react'
 import { RiAddCircleFill } from "react-icons/ri";
@@ -15,7 +16,7 @@ export default function Projects() {
     const pathname = usePathname()
     const workspaceId = useWorkspaceId()
     const { project, loading } = useGetProject(workspaceId);
-    const {open} = useCreateProject()
+    const { open } = useCreateProject()
 
 
 
@@ -26,17 +27,25 @@ export default function Projects() {
                 <RiAddCircleFill onClick={open} className="size-5 text-neutral-500 cursor-pointer" />
             </div>
             <div>
-                {project.map((project)=>{
-                    const href = `/workspace/${workspaceId}/project/${projectId}`
+                {project.map((project) => {
+                    const href = `/workspaces/${workspaceId}/project/${project._id}`
                     const isActive = pathname === `/workspace/${workspaceId}/project/${projectId}`
                     return (
-                        <Link href={'href'} key={project._id}>
-                            <div className={cn("flex items-center gap-2.5 p-2.5 rounded-md hover:opacity-75 transition cursor-pointer text-neutral-500"
-                                ,isActive && "bg-white shadow-sm hover:opacity-100 text-primary"
+                        <Link href={href} key={project._id}>
+                            <div className={cn("flex items-center rounded-md hover:opacity-75 transition cursor-pointer text-neutral-500"
+                                , isActive && "bg-white shadow-sm hover:opacity-100 text-primary"
                             )}>
-                                <span className='truncate'>
-                                    {project.name}
-                                </span>
+                                
+                                    <div className='p-2'>
+                                        <Avatar className={cn("size-20")}>
+                                        <AvatarFallback className={cn(` p-2 m-1 bg-blue-500 text-white font-semibold text-sm uppercase rounded-md`)}>
+                                            {project.name[0].toUpperCase()}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    </div>
+                                    <span className='text-sm'>
+                                        {project.name}
+                                    </span>
                             </div>
                         </Link>
                     )

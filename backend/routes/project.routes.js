@@ -24,6 +24,27 @@ router.get("/get-projects/:workspaceId", authProtect, async (req, res) => {
     }
 })
 
+router.get("/get-project/:projectId", authProtect, async (req, res) =>{
+    try {
+        const {projectId} = req.params
+        if (!projectId) {
+            return res.status(400).send("Missing Project ID")
+        }
+        const project = await projectModel.findById(projectId)
+        if (!project) {
+            return res.status(404).send("Project not found")
+        }
+        const memeber = await memberModel.find({workspaceId : project.workspaceId,userId : req.user._id})
+        if (!memeber) {
+            return res.status(401).send("Unauthroize")
+        }
+        return res.status(200).send(project)
+    } catch (error) {
+        console.error(error)
+        return res.status(500).send(error)
+    }
+})
+
 router.post("/create-project/:workspaceId", authProtect, async(req,res)=>{
     try {
         const {name} = req.body
@@ -45,5 +66,9 @@ router.post("/create-project/:workspaceId", authProtect, async(req,res)=>{
         return res.status(500).send(error)
     }
 })
+
+// Todo : Create udpate project route
+
+// Todo : Create delete project route
 
 export default router
