@@ -9,6 +9,7 @@ connectDB();
 // routes import
 import authRoutes from "./routes/auth.routes.js";
 import workspaceRoutes from "./routes/workspace.routes.js"
+import projectRoutes from "./routes/project.routes.js";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(cors());
 
 app.use("/auth", authRoutes);
 app.use("/workspace",workspaceRoutes)
+app.use("/project",projectRoutes)
 
 app.listen(8000, () => {
   console.log("Server listening on port ");
