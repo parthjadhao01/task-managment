@@ -35,17 +35,17 @@ export default function Projects() {
                             <div className={cn("flex items-center rounded-md hover:opacity-75 transition cursor-pointer text-neutral-500"
                                 , isActive && "bg-white shadow-sm hover:opacity-100 text-primary"
                             )}>
-                                
-                                    <div className='p-2'>
-                                        <Avatar className={cn("size-20")}>
+
+                                <div className='p-2'>
+                                    <Avatar className={cn("size-20")}>
                                         <AvatarFallback className={cn(` p-2 m-1 bg-blue-500 text-white font-semibold text-sm uppercase rounded-md`)}>
                                             {project.name[0].toUpperCase()}
                                         </AvatarFallback>
                                     </Avatar>
-                                    </div>
-                                    <span className='text-sm'>
-                                        {project.name}
-                                    </span>
+                                </div>
+                                <span className='text-sm'>
+                                    {project.name}
+                                </span>
                             </div>
                         </Link>
                     )

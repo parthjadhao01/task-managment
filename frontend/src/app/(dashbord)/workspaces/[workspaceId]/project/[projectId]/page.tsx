@@ -1,6 +1,7 @@
 "use client";
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import TaskViewSwitcher from '@/features/task/components/TaskViewSwitcher';
 import useGetSpecificProject from '@/hooks/useGetSpecificProject';
 import { cn } from '@/lib/utils';
 import { Edit } from 'lucide-react';
@@ -48,6 +49,8 @@ export default async function ProjectIdPage({ params }: ProjectIdPageProps) {
                     </Link>
                 </Button>
             </div>
+            <TaskViewSwitcher/>
+            
         </div>
     );
 }
