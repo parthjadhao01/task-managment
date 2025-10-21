@@ -3,14 +3,20 @@ import DottedSeparator from '@/components/dotted-separator'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import useCreateTask from '@/hooks/useCreateTask'
-import { PlusIcon } from 'lucide-react'
+import useGetTask from '@/hooks/useGetTask'
+import useWorkspaceId from '@/hooks/useWorkSpaceId'
+import { Loader, PlusIcon } from 'lucide-react'
 import React from 'react'
+import DateFilter from './dataFilter'
 
 export default function TaskViewSwitcher() {
-    const {open} = useCreateTask();
+    const workspaceId = useWorkspaceId()
+    const { tasks, loading } = useGetTask({ workspaceId })
+
+    const { open } = useCreateTask();
 
     return (
-        <Tabs className='flex-1 w-full border  rounded-lg'>
+        <Tabs className='flex-1 w-full border  rounded-lg' defaultValue='table'>
             <div className='h-full flex flex-col overflow-auto p-4'>
                 <div className='flex flex-col gap-y-2 lg:flex-row justify-between items-center'>
                     <TabsList className='w-full lg:w-auto'>
@@ -28,15 +34,22 @@ export default function TaskViewSwitcher() {
                 </div>
 
                 <DottedSeparator className='my-4' />
-                {/* Add Fillter */}
-                <>
-                    <TabsContent value='table' className='mt-0'>
-                        Data Table
-                    </TabsContent>
-                    <TabsContent value='kanban' className='mt-0'>
-                        Data Kanban
-                    </TabsContent>
-                </>
+                <DateFilter/>
+                <DottedSeparator className='my-4' />
+                {loading ? (
+                    <div className='w-full border rounded-lg h-[200px] flex flex-col items-center justify-center'>
+                        <Loader/>
+                    </div>
+                ) : (
+                    <>
+                        <TabsContent value='table' className='mt-0'>
+                            {JSON.stringify(tasks)}
+                        </TabsContent>
+                        <TabsContent value='kanban' className='mt-0'>
+                            Data Kanban
+                        </TabsContent>
+                    </>
+                )}
                 <DottedSeparator className='my-4' />
             </div>
         </Tabs>

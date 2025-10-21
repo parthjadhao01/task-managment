@@ -22,7 +22,7 @@ router.post("/create-task",authProtect,async (req,res)=>{
     }
 })
 
-router.get("/get-tasks", authProtect, async (req, res) => {
+router.post("/get-tasks", authProtect, async (req, res) => {
   try {
     const { workspaceId, projectId, status, search, assignedId, dueDate } = req.body;
 
