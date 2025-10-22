@@ -1,8 +1,10 @@
 "use client"
 import EditProjectForm from '@/components/edit-project-form'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
+import useGetMember from '@/hooks/useGetMember'
 import useGetSpecificProject from '@/hooks/useGetSpecificProject'
+import { Loader } from 'lucide-react'
 import React from 'react'
 
 interface SettingPageProps {
@@ -14,7 +16,8 @@ interface SettingPageProps {
 export default function SettingsPage({
     params
 }: SettingPageProps) {
-    const { project, loading } = useGetSpecificProject(params.projectId)
+    const { project } = useGetSpecificProject(params.projectId)
+    
 
     return (
         <div className='w-full lg:max-w-xl'>

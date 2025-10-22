@@ -2,6 +2,7 @@ import CreateProjectModel from '@/components/create-project-modal'
 import CreateWorkSpaceModel from '@/components/create-workspace-model'
 import Navbar from '@/components/navbar'
 import Sidebar from '@/components/sidebar'
+import CreateTasksModel from '@/features/task/components/CreateTasksModel'
 import React from 'react'
 
 interface DashbordLayoutProps {
@@ -13,6 +14,7 @@ export default function DashbordLayout({children} : DashbordLayoutProps) {
     <div className='min-h-screen'>
         <CreateWorkSpaceModel/>
         <CreateProjectModel/>
+        <CreateTasksModel/>
         <div className='flex w-full h-full'>
             <div className='fixed left-0 top-0 hidden lg:block lg:w-[264px] h-full overflow-y-auto'>
                 <Sidebar/>
