@@ -10,6 +10,7 @@ import React from 'react'
 import DateFilter from './dataFilter'
 import { DataTable } from './dataTable'
 import { columns } from './columns'
+import DataKanban from './dataKanban'
 
 export default function TaskViewSwitcher() {
     const workspaceId = useWorkspaceId()
@@ -51,11 +52,12 @@ export default function TaskViewSwitcher() {
                             />
                         </TabsContent>
                         <TabsContent value='kanban' className='mt-0'>
-                            Data Kanban
+                            <DataKanban 
+                                data={(tasks ?? []).map(t => ({ ...t, dueDate: new Date((t as any).dueDate) })) as any}
+                            />
                         </TabsContent>
                     </>
                 )}
-                <DottedSeparator className='my-4' />
             </div>
         </Tabs>
     )
