@@ -6,6 +6,45 @@ import memberModel from "../models/member.model.js"
 
 const router = express.Router()
 
+/**
+ * @swagger
+ * /workspace/create-workspace:
+ *   post:
+ *     summary: Create a new workspace
+ *     tags: [Workspace]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: My New Workspace
+ *     responses:
+ *       201:
+ *         description: Workspace created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 workspace:
+ *                   $ref: '#/components/schemas/Workspace'
+ *       400:
+ *         description: User not found
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
 router.post("/create-workspace", authProtect, (req, res) => {
     try {
         const { name } = req.body
@@ -27,6 +66,30 @@ router.post("/create-workspace", authProtect, (req, res) => {
     }
 })
 
+/**
+ * @swagger
+ * /workspace/get-workspaces:
+ *   get:
+ *     summary: Get all workspaces for the current user
+ *     tags: [Workspace]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of workspaces
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Workspace'
+ *       400:
+ *         description: No workspaces found
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
 router.get("/get-workspaces", authProtect, async (req, res) => {
     try {
         const userId = req.user._id

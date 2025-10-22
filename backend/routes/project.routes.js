@@ -5,6 +5,37 @@ import projectModel from "../models/project.model.js";
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /project/get-projects/{workspaceId}:
+ *   get:
+ *     summary: Get all projects in a workspace
+ *     tags: [Project]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: workspaceId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Workspace ID
+ *     responses:
+ *       200:
+ *         description: List of projects
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Project'
+ *       400:
+ *         description: Missing Workspace ID
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
 router.get("/get-projects/:workspaceId", authProtect, async (req, res) => {
     try {
         const { workspaceId } = req.params
@@ -24,6 +55,37 @@ router.get("/get-projects/:workspaceId", authProtect, async (req, res) => {
     }
 })
 
+/**
+ * @swagger
+ * /project/get-project/{projectId}:
+ *   get:
+ *     summary: Get a single project by ID
+ *     tags: [Project]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: projectId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Project ID
+ *     responses:
+ *       200:
+ *         description: Project details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ *       400:
+ *         description: Missing Project ID
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Project not found
+ *       500:
+ *         description: Internal server error
+ */
 router.get("/get-project/:projectId", authProtect, async (req, res) =>{
     try {
         const {projectId} = req.params
@@ -45,6 +107,47 @@ router.get("/get-project/:projectId", authProtect, async (req, res) =>{
     }
 })
 
+/**
+ * @swagger
+ * /project/create-project/{workspaceId}:
+ *   post:
+ *     summary: Create a new project
+ *     tags: [Project]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: workspaceId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Workspace ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Website Redesign
+ *     responses:
+ *       200:
+ *         description: Project created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ *       400:
+ *         description: Missing required fields
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
 router.post("/create-project/:workspaceId", authProtect, async(req,res)=>{
     try {
         const {name} = req.body

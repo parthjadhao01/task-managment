@@ -6,6 +6,57 @@ import projectModel from "../models/project.model.js";
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /task/create-task:
+ *   post:
+ *     summary: Create a new task
+ *     tags: [Task]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - workspaceId
+ *               - projectId
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Design homepage
+ *               status:
+ *                 type: string
+ *                 enum: [Backlog, Todo, Doing, Done]
+ *                 example: Todo
+ *               workspaceId:
+ *                 type: string
+ *                 example: 507f1f77bcf86cd799439011
+ *               projectId:
+ *                 type: string
+ *                 example: 507f1f77bcf86cd799439011
+ *               assignedId:
+ *                 type: string
+ *                 example: 507f1f77bcf86cd799439011
+ *               dueDate:
+ *                 type: string
+ *                 format: date
+ *                 example: 2025-12-31
+ *     responses:
+ *       200:
+ *         description: Task created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Task'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
 router.post("/create-task",authProtect,async (req,res)=>{
     try {
         const {name,status,workspaceId,projectId,assignedId,dueDate} = req.body
@@ -22,6 +73,64 @@ router.post("/create-task",authProtect,async (req,res)=>{
     }
 })
 
+/**
+ * @swagger
+ * /task/get-tasks:
+ *   post:
+ *     summary: Get tasks with filters
+ *     tags: [Task]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - workspaceId
+ *             properties:
+ *               workspaceId:
+ *                 type: string
+ *                 example: 507f1f77bcf86cd799439011
+ *               projectId:
+ *                 type: string
+ *                 example: 507f1f77bcf86cd799439011
+ *               status:
+ *                 type: string
+ *                 enum: [Backlog, Todo, Doing, Done]
+ *                 example: Todo
+ *               search:
+ *                 type: string
+ *                 example: design
+ *               assignedId:
+ *                 type: string
+ *                 example: 507f1f77bcf86cd799439011
+ *               dueDate:
+ *                 type: string
+ *                 format: date
+ *                 example: 2025-12-31
+ *     responses:
+ *       200:
+ *         description: Tasks retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 count:
+ *                   type: integer
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Task'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
 router.post("/get-tasks", authProtect, async (req, res) => {
   try {
     const { workspaceId, projectId, status, search, assignedId, dueDate } = req.body;
