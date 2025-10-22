@@ -8,6 +8,8 @@ import useWorkspaceId from '@/hooks/useWorkSpaceId'
 import { Loader, PlusIcon } from 'lucide-react'
 import React from 'react'
 import DateFilter from './dataFilter'
+import { DataTable } from './dataTable'
+import { columns } from './columns'
 
 export default function TaskViewSwitcher() {
     const workspaceId = useWorkspaceId()
@@ -43,7 +45,10 @@ export default function TaskViewSwitcher() {
                 ) : (
                     <>
                         <TabsContent value='table' className='mt-0'>
-                            {JSON.stringify(tasks)}
+                            <DataTable
+                                columns={columns}
+                                data={(tasks ?? []).map(t => ({ ...t, dueDate: new Date((t as any).dueDate) })) as any}
+                            />
                         </TabsContent>
                         <TabsContent value='kanban' className='mt-0'>
                             Data Kanban

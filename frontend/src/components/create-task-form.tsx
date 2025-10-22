@@ -84,6 +84,7 @@ export default function CreateTaskForm({
     try {
       const token = localStorage.getItem("token");
       const payload = { ...values, workspaceId };
+      console.log(payload)
 
       const res = await axios.post("http://localhost:8000/task/create-task", payload, {
         headers: { Authorization: `Bearer ${token}` },
