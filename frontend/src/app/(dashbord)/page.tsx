@@ -1,31 +1,38 @@
+"use client";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchWorkspaces } from "@/store/slices/workspaceSlice";
+import { Loader } from "lucide-react";
 
-"use client"
-import WorkSpaceForm from '@/components/create-workspace-form'
-import UserButton from '@/features/auth/user-button'
-import useGetWorkSpace from '@/hooks/useGetWorkSpace'
-import useProfile from '@/hooks/useProfile'
-import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
-
-
-export default function page() {
-  const { workspaces, loading } = useGetWorkSpace()
+export default function DashboardPage() {
+  const { workspaces, loading } = useAppSelector((state) => state.workspace);
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
     if (!token) {
-      router.push("/sign-in")
+      router.push("/sign-in");
+      return;
     }
 
-    if (loading) {
+    dispatch(fetchWorkspaces());
+  }, [dispatch, router]);
+
+  useEffect(() => {
+    if (!loading) {
       if (workspaces.length === 0) {
-        router.push("/workspaces/create")
+        router.push("/workspaces/create");
       } else {
-        router.push(`/workspaces/${workspaces[0]._id}`)
+        router.push(`/workspaces/${workspaces[0]._id}`);
       }
     }
-  },[loading, router, workspaces])
+  }, [loading, router, workspaces]);
 
-  return null
+  return (
+    <div className="h-full flex items-center justify-center">
+      <Loader className="size-6 animate-spin text-muted-foreground" />
+    </div>
+  );
 }
