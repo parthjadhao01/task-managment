@@ -93,14 +93,14 @@ export const columns: ColumnDef<Task>[] = [
                 <Button
                     variant="ghost"
                 >
-                    dueDate
+                    status
                     <ArrowUpDown />
                 </Button>
             )
         },
         cell: ({ row }) => {
             const status = row.original.status
-            return <Badge className='line-clamp-1 w-[100px]'>{status}</Badge>
+            return <Badge className='line-clamp-1 w-[100px] bg-blue-600 text-center'>{status}</Badge>
         }
     },
     {

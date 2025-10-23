@@ -12,9 +12,13 @@ import { DataTable } from './dataTable'
 import { columns } from './columns'
 import DataKanban from './dataKanban'
 
-export default function TaskViewSwitcher() {
+interface TaskViewSwitcherProps{
+    projectId?: string
+}
+
+export default function TaskViewSwitcher({projectId}: TaskViewSwitcherProps) {
     const workspaceId = useWorkspaceId()
-    const { tasks, loading } = useGetTask({ workspaceId })
+    const { tasks, loading } = useGetTask({ workspaceId,projectId })
 
     const { open } = useCreateTask();
 

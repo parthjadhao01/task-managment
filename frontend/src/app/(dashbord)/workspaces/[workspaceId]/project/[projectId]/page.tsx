@@ -49,7 +49,7 @@ export default async function ProjectIdPage({ params }: ProjectIdPageProps) {
                     </Link>
                 </Button>
             </div>
-            <TaskViewSwitcher/>
+            <TaskViewSwitcher projectId={project?._id}/>
             
         </div>
     );
