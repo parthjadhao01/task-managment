@@ -135,7 +135,7 @@ router.post("/get-tasks", authProtect, async (req, res) => {
   try {
     const { workspaceId, projectId, status, search, assignedId, dueDate } = req.body;
 
-    // 1️⃣ Check if user is a valid member of the workspace
+    // 1️ Check if user is a valid member of the workspace
     const member = await memberModel.findOne({
       workspaceId,
       userId: req.user._id,
@@ -145,7 +145,7 @@ router.post("/get-tasks", authProtect, async (req, res) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // 2️⃣ Build a dynamic filter object for MongoDB
+    // 2️ Build a dynamic filter object for MongoDB
     const filter = { workspaceId };
 
     if (projectId) filter.projectId = projectId;
@@ -153,22 +153,22 @@ router.post("/get-tasks", authProtect, async (req, res) => {
     if (assignedId) filter.assignedId = assignedId;
     if (dueDate) filter.dueDate = dueDate;
 
-    // 3️⃣ Base query
+    // 3️ Base query
     let query = taskModel.find(filter);
 
-    // 4️⃣ Add search condition if provided
+    // 4️ Add search condition if provided
     if (search) {
       query = query.find({ name: { $regex: search, $options: "i" } }); // case-insensitive
     }
 
-    // 5️⃣ Populate related data
+    // 5️ Populate related data
     const tasks = await query
       .populate("projectId", "name description")     // Only select name & description
       .populate("workspaceId", "name")               // Only select workspace name
       .populate("assignedId", "name email avatar")   // Select user fields
       .exec();
 
-    // 6️⃣ Return populated data
+    // 6️ Return populated data
     return res.status(200).json({
       success: true,
       count: tasks.length,
@@ -179,6 +179,64 @@ router.post("/get-tasks", authProtect, async (req, res) => {
     console.error("Error fetching tasks:", error);
     return res.status(500).json({ success: false, message: "Server error" });
   }
+});
+
+router.patch('/:taskId/status', authProtect, async (req, res) => {
+    try {
+        const { taskId } = req.params;
+        const { status } = req.body;
+
+        // Validate status
+        const validStatuses = ['Backlog', 'Todo', 'Doing', 'Done'];
+        if (!status || !validStatuses.includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid status. Must be one of: Backlog, Todo, Doing, Done'
+            });
+        }
+
+        // Find the task
+        const task = await taskModel.findById(taskId);
+        
+        if (!task) {
+            return res.status(404).json({
+                success: false,
+                message: 'Task not found'
+            });
+        }
+
+        // Optional: Check if user has permission to update this task
+        // Uncomment and adjust based on your auth implementation
+        /*
+        if (task.workspaceId.toString() !== req.user.workspaceId) {
+            return res.status(403).json({
+                success: false,
+                message: 'Not authorized to update this task'
+            });
+        }
+        */
+
+        // Update the status
+        task.status = status;
+        await task.save();
+
+        // Populate necessary fields for response
+        await task.populate('projectId assignedId.userId');
+
+        res.status(200).json({
+            success: true,
+            message: 'Task status updated successfully',
+            data: task
+        });
+
+    } catch (error) {
+        console.error('Error updating task status:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error while updating task status',
+            error: error.message
+        });
+    }
 });
 
 
