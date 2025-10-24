@@ -34,7 +34,7 @@ const routes = [
 ]
 
 export default function Navigation() {
-  const workspaceId = useWorkspaceId()
+  const workspaceId = useWorkspaceId();
   return (
     <ul className='flex flex-col '>
         {routes.map((item)=>{
