@@ -13,9 +13,16 @@ const memberSchema = new Schema({
     },
     role: {
         type: String,
-        enum: ["admin", "member"], // only these are allowed
-        default: "user"
+        enum: ["admin", "member"],
+        default: "member"
     },
-})
+    roleId: {
+        type: Schema.Types.ObjectId,
+        ref: "Role",
+        required: false // Only required for non-admin members
+    }
+}, {
+    timestamps: true
+});
 
-export default mongoose.model("Member",memberSchema)
+export default mongoose.model("Member", memberSchema);

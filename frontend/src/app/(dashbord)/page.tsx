@@ -4,6 +4,8 @@ import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchWorkspaces } from "@/store/slices/workspaceSlice";
 import { Loader } from "lucide-react";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
 
 export default function DashboardPage() {
   const { workspaces, loading } = useAppSelector((state) => state.workspace);

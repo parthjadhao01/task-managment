@@ -14,6 +14,7 @@ import workspaceRoutes from "./routes/workspace.routes.js"
 import projectRoutes from "./routes/project.routes.js";
 import taskRoutes from "./routes/task.routes.js";
 import memberRoutes from "./routes/member.routes.js";
+import roleRoutes from "./routes/role.routes.js";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/workspace",workspaceRoutes)
 app.use("/project",projectRoutes)
 app.use("/task",taskRoutes)
 app.use("/member",memberRoutes)
+app.use("/role",roleRoutes)
 
 // Health check route
 app.get("/", (req, res) => {

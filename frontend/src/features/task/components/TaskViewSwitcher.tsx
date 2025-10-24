@@ -11,6 +11,7 @@ import DateFilter from './dataFilter'
 import { DataTable } from './dataTable'
 import { columns } from './columns'
 import DataKanban from './dataKanban'
+import PermissionGuard from '@/components/permission-guard'
 
 interface TaskViewSwitcherProps{
     projectId?: string
@@ -34,10 +35,12 @@ export default function TaskViewSwitcher({projectId}: TaskViewSwitcherProps) {
                             Kanban
                         </TabsTrigger>
                     </TabsList>
-                    <Button onClick={open} className='w-full lg:w-auto'>
-                        <PlusIcon className='size-4 mr-2' />
-                        New
-                    </Button>
+                    <PermissionGuard resource="tasks" action="create">
+                        <Button onClick={open} className='w-full lg:w-auto'>
+                            <PlusIcon className='size-4 mr-2' />
+                            New
+                        </Button>
+                    </PermissionGuard>
                 </div>
 
                 <DottedSeparator className='my-4' />

@@ -7,7 +7,7 @@ export const store = configureStore({
     workspace: workspaceReducer,
     project: projectReducer,
   },
-  middleware: (getDefaultMiddleware) =>
+  middleware: (getDefaultMiddleware : any) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }),
